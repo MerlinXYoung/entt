@@ -116,30 +116,8 @@ TEST(Benchmark, IterateSingleComponent1M) {
     };
 
     test([](auto, const auto &) {});
-    test([](auto, auto &... comp) {
-        ((comp.x = {}), ...);
-    });
-}
-
-TEST(Benchmark, IterateSingleComponentRaw1M) {
-    entt::registry<> registry;
-
-    std::cout << "Iterating over 1000000 entities, one component, raw view" << std::endl;
-
-    for(std::uint64_t i = 0; i < 1000000L; i++) {
-        const auto entity = registry.create();
-        registry.assign<position>(entity);
-    }
-
-    auto test = [&registry](auto func) {
-        timer timer;
-        registry.raw_view<position>().each(func);
-        timer.elapsed();
-    };
-
-    test([](const auto &) {});
-    test([](auto &... comp) {
-        ((comp.x = {}), ...);
+    test([](auto, auto &comp) {
+        comp.x = {};
     });
 }
 
